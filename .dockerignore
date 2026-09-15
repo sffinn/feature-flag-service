@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+spec.md
+README.md
+.do
+docker-compose.yml
+**/*_test.go
+coverage.out

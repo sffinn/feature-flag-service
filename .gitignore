@@ -1,6 +1,8 @@
 .DS_Store
 bin/
 dist/
+feature-flag-service
+server
 *.exe
 *.test
 *.out

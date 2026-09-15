@@ -32,13 +32,20 @@ Liveness probe for App Platform.
 docker compose up --build
 ```
 
-Or run dependencies and the binary:
+Build the binary:
+
+```bash
+make build          # writes bin/feature-flag-service
+# or: go build -o bin/feature-flag-service ./cmd/feature-flag-service
+```
+
+Or run dependencies and the server without installing:
 
 ```bash
 docker compose up -d postgres redis
 export DATABASE_URL='postgres://flags:flags@localhost:5432/flags?sslmode=disable'
 export REDIS_URL='redis://localhost:6379/0'
-go run ./cmd/server
+go run ./cmd/feature-flag-service
 ```
 
 Example:
