@@ -6,34 +6,40 @@ services:
       POSTGRES_PASSWORD: flags
       POSTGRES_DB: flags
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U flags -d flags"]
       interval: 2s
       timeout: 5s
       retries: 10
 
-  redis:
-    image: redis:7-alpine
+  valkey:
+    image: valkey/valkey:8-alpine
     ports:
-      - "6379:6379"
+      - "${VALKEY_PORT:-6379}:6379"
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "valkey-cli", "ping"]
       interval: 2s
       timeout: 5s
       retries: 10
 
   api:
     build: .
+    restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "${API_PORT:-8080}:8080"
     environment:
       PORT: "8080"
       DATABASE_URL: postgres://flags:flags@postgres:5432/flags?sslmode=disable
-      REDIS_URL: redis://redis:6379/0
+      REDIS_URL: redis://valkey:6379/0
       CACHE_TTL_SECONDS: "60"
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
+      valkey:
         condition: service_healthy
+
+volumes:
+  postgres-data:

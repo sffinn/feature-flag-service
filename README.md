@@ -28,8 +28,33 @@ Liveness probe for App Platform.
 
 ## Local development
 
+Requires a running Docker daemon. On macOS with OrbStack:
+
+```bash
+orb start                    # or launch OrbStack.app
+docker context use orbstack
+docker info | head           # must show a "Server:" section
+```
+
+Then bring up the full stack (API + Postgres + Valkey):
+
 ```bash
 docker compose up --build
+```
+
+If ports 5432, 6379, or 8080 are already taken on your host, remap the host side
+without editing the file:
+
+```bash
+POSTGRES_PORT=55432 VALKEY_PORT=56379 API_PORT=8081 docker compose up --build
+```
+
+The runtime image is distroless, so it has no shell — `docker compose exec api sh`
+will fail by design. Debug from the host instead:
+
+```bash
+docker compose logs -f api
+curl -s localhost:8080/health
 ```
 
 Build the binary:
@@ -39,10 +64,10 @@ make build          # writes bin/feature-flag-service
 # or: go build -o bin/feature-flag-service ./cmd/feature-flag-service
 ```
 
-Or run dependencies and the server without installing:
+Or run just the dependencies and the server from source:
 
 ```bash
-docker compose up -d postgres redis
+docker compose up -d postgres valkey
 export DATABASE_URL='postgres://flags:flags@localhost:5432/flags?sslmode=disable'
 export REDIS_URL='redis://localhost:6379/0'
 go run ./cmd/feature-flag-service
@@ -68,7 +93,7 @@ curl -s 'localhost:8080/v1/flag?user=alice&flagname=beta'
 go test ./...
 ```
 
-With local Postgres and Redis running (for example via `docker compose up -d postgres redis`):
+With local Postgres and Valkey running (for example via `docker compose up -d postgres valkey`):
 
 ```bash
 export DATABASE_URL='postgres://flags:flags@localhost:5432/flags?sslmode=disable'
