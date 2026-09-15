@@ -84,7 +84,7 @@ The spec provisions:
 
 - a web service built from the `Dockerfile`
 - managed Postgres (`DATABASE_URL`)
-- managed Redis (`REDIS_URL`)
+- managed Valkey (`REDIS_URL`; Valkey is Redis-protocol compatible)
 - health checks on `/health`
 
 Migrations apply automatically on process start.
@@ -95,5 +95,5 @@ Migrations apply automatically on process start.
 |----------|----------|---------|-------------|
 | `PORT` | no | `8080` | Listen port |
 | `DATABASE_URL` | yes | — | Postgres connection URL |
-| `REDIS_URL` | yes | — | Redis connection URL |
+| `REDIS_URL` | yes | — | Valkey/Redis connection URL |
 | `CACHE_TTL_SECONDS` | no | `60` | Cache TTL for evaluated flags |

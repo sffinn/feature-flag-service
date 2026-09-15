@@ -21,7 +21,7 @@ services:
       - key: REDIS_URL
         scope: RUN_TIME
         type: SECRET
-        value: ${redis.DATABASE_URL}
+        value: ${valkey.DATABASE_URL}
       - key: CACHE_TTL_SECONDS
         scope: RUN_TIME
         value: "60"
@@ -35,8 +35,8 @@ databases:
     version: "16"
     cluster_name: feature-flag-service-db
     production: true
-  - name: redis
-    engine: REDIS
-    version: "7"
-    cluster_name: feature-flag-service-cache
+  - name: valkey
+    engine: VALKEY
+    version: "8"
+    cluster_name: feature-flag-service-valkey
     production: true
