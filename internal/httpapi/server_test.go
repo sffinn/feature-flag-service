@@ -42,7 +42,7 @@ func TestHealth(t *testing.T) {
 	}
 }
 
-func TestCreateAndEvaluateHandlers(t *testing.T) {
+func TestCreateUpdateAndEvaluateHandlers(t *testing.T) {
 	t.Parallel()
 
 	flags := stubFlags{

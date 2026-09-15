@@ -205,6 +205,20 @@ func TestEvaluateNotFound(t *testing.T) {
 	}
 }
 
+func TestCreateSuccess(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	svc := flag.NewService(newMemStore(), newMemCache(), time.Minute)
+
+	if _, err := svc.Create(ctx, "alice", "beta", true); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := svc.Create(ctx, "", "beta", true); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestCreateConflictAndInvalid(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
@@ -218,5 +232,25 @@ func TestCreateConflictAndInvalid(t *testing.T) {
 	}
 	if _, err := svc.Create(ctx, "", "x", false); !errors.Is(err, flag.ErrFlagExists) {
 		t.Fatalf("got %v, want exists", err)
+	}
+}
+
+func TestUpdateInvalid(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	svc := flag.NewService(newMemStore(), newMemCache(), time.Minute)
+
+	if _, err := svc.Update(ctx, "", "bad name", true); !errors.Is(err, flag.ErrInvalidFlagName) {
+		t.Fatalf("got %v, want invalid", err)
+	}
+}
+
+func TestUpdateSuccess(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	svc := flag.NewService(newMemStore(), newMemCache(), time.Minute)
+
+	if _, err := svc.Update(ctx, "alice", "beta", true); err != nil {
+		t.Fatal(err)
 	}
 }
