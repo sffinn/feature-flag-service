@@ -1,0 +1,40 @@
+name: featureflag-service
+region: nyc
+services:
+  - name: api
+    github:
+      # Replace with your GitHub org/repo after pushing.
+      repo: sffinn/feature-flag-service
+      branch: mainline
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    health_check:
+      http_path: /health
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        type: SECRET
+        value: ${db.DATABASE_URL}
+      - key: REDIS_URL
+        scope: RUN_TIME
+        type: SECRET
+        value: ${redis.DATABASE_URL}
+      - key: CACHE_TTL_SECONDS
+        scope: RUN_TIME
+        value: "60"
+      - key: PORT
+        scope: RUN_TIME
+        value: "8080"
+
+databases:
+  - name: db
+    engine: PG
+    version: "16"
+    production: false
+  - name: redis
+    engine: REDIS
+    version: "7"
+    production: false

@@ -48,6 +48,11 @@ Response:
 }
 ```
 
+```
+GET /health
+Response:
+"healthy"
+
 ```go
 type UserFlag struct {
     username string

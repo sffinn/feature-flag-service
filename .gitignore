@@ -1,0 +1,10 @@
+.DS_Store
+bin/
+dist/
+*.exe
+*.test
+*.out
+coverage.out
+.env
+.env.*
+!.env.example
