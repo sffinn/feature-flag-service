@@ -28,6 +28,7 @@ flowchart TD
 ```
 
 ### 3.2 Key Interfaces / Contracts
+**Create Flag**
 ```
 POST /v1/flag
 Request:
@@ -42,6 +43,22 @@ Response:
 }
 ```
 
+**Update Flag**
+```
+PUT /v1/flag
+Request:
+{
+    "user": string,
+    "flagname": string,
+    enabled: bool
+}
+Response:
+{
+    "flagname": string
+}
+```
+
+**Evaluate Flag**
 ```
 GET /v1/flag
 Request:
