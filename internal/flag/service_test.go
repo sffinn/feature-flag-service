@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/featureflag-service/featureflag-service/internal/flag"
+	"github.com/feature-flag-service/feature-flag-service/internal/flag"
 )
 
 func TestValidateFlagName(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 	"embed"
 	"fmt"
 
-	"github.com/featureflag-service/featureflag-service/internal/store/postgres"
+	"github.com/feature-flag-service/feature-flag-service/internal/store/postgres"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

@@ -9,8 +9,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/featureflag-service/featureflag-service/internal/flag"
-	"github.com/featureflag-service/featureflag-service/internal/httpapi"
+	"github.com/feature-flag-service/feature-flag-service/internal/flag"
+	"github.com/feature-flag-service/feature-flag-service/internal/httpapi"
 )
 
 type stubFlags struct {

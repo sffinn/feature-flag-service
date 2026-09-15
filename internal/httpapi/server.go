@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/featureflag-service/featureflag-service/internal/flag"
+	"github.com/feature-flag-service/feature-flag-service/internal/flag"
 )
 
 // FlagService is the subset of flag.Service used by handlers.

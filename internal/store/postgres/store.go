@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/featureflag-service/featureflag-service/internal/flag"
+	"github.com/feature-flag-service/feature-flag-service/internal/flag"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"

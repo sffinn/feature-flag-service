@@ -11,11 +11,11 @@ import (
 	"syscall"
 	"time"
 
-	rediscache "github.com/featureflag-service/featureflag-service/internal/cache/redis"
-	"github.com/featureflag-service/featureflag-service/internal/flag"
-	"github.com/featureflag-service/featureflag-service/internal/httpapi"
-	"github.com/featureflag-service/featureflag-service/internal/migrate"
-	"github.com/featureflag-service/featureflag-service/internal/store/postgres"
+	rediscache "github.com/feature-flag-service/feature-flag-service/internal/cache/redis"
+	"github.com/feature-flag-service/feature-flag-service/internal/flag"
+	"github.com/feature-flag-service/feature-flag-service/internal/httpapi"
+	"github.com/feature-flag-service/feature-flag-service/internal/migrate"
+	"github.com/feature-flag-service/feature-flag-service/internal/store/postgres"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 )
