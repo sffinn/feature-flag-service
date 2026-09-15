@@ -67,5 +67,10 @@ type GlobalFlag struct {
 TBD
 
 ### 5.5 Error Handling & Edge Cases
+**Post /v1/flag**
+HTTP 400 Invalid Flag Name
+HTTP 409 Flag Exists
 
+**Get /v1/flag**
+HTTP 404 Flag Not Found
 
