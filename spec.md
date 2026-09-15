@@ -93,7 +93,7 @@ type GlobalFlag struct {
 }
 ```
 
-### 5.4 Internal Comonents
+### 3.4 Internal Comonents
 ```mermaid
 flowchart LR
     subgraph httpLayer [HTTP Layer]
@@ -127,7 +127,7 @@ flowchart LR
     PGStore --> UserFlags
 ```
 
-### 5.5 Data Flow / Sequence
+### 3.5 Data Flow / Sequence
 **Create Flag**
 ```mermaid
 sequenceDiagram
@@ -255,7 +255,7 @@ sequenceDiagram
     end
 ```
 
-### 5.6 Error Handling & Edge Cases
+### 3.6 Error Handling & Edge Cases
 **Post /v1/flag**
 HTTP 400 Invalid Flag Name
 HTTP 409 Flag Exists
