@@ -1,4 +1,4 @@
-name: featureflag-service
+name: feature-flag-service
 region: nyc
 services:
   - name: api
@@ -6,7 +6,7 @@ services:
       # Replace with your GitHub org/repo after pushing.
       repo: sffinn/feature-flag-service
       branch: mainline
-      deploy_on_push: true
+      deploy_on_push: false
     dockerfile_path: Dockerfile
     http_port: 8080
     instance_count: 1
@@ -33,8 +33,10 @@ databases:
   - name: db
     engine: PG
     version: "16"
-    production: false
+    cluster_name: feature-flag-service-db
+    production: true
   - name: redis
     engine: REDIS
     version: "7"
-    production: false
+    cluster_name: feature-flag-service-cache
+    production: true
