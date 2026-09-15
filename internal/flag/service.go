@@ -12,6 +12,8 @@ import (
 type Store interface {
 	CreateGlobal(ctx context.Context, f GlobalFlag) error
 	CreateUser(ctx context.Context, f UserFlag) error
+	UpdateGlobal(ctx context.Context, f GlobalFlag) error
+	UpdateUser(ctx context.Context, f UserFlag) error
 	GetGlobal(ctx context.Context, flagName string) (enabled bool, err error)
 	GetUser(ctx context.Context, username, flagName string) (enabled bool, err error)
 }
@@ -63,6 +65,29 @@ func (s *Service) Create(ctx context.Context, username, flagName string, enabled
 	}
 
 	err = s.store.CreateUser(ctx, UserFlag{Username: username, FlagName: flagName, Enabled: enabled})
+	if err != nil {
+		return "", err
+	}
+	_ = s.cache.Delete(ctx, userKey(username, flagName))
+	return flagName, nil
+}
+
+func (s *Service) Update(ctx context.Context, username, flagName string, enabled bool) (string, error) {
+	flagName, err := ValidateFlagName(flagName)
+	if err != nil {
+		return "", err
+	}
+	username = strings.TrimSpace(username)
+	if username == "" {
+		err = s.store.UpdateGlobal(ctx, GlobalFlag{FlagName: flagName, Enabled: enabled})
+		if err != nil {
+			return "", err
+		}
+		_ = s.cache.Delete(ctx, globalKey(flagName))
+		return flagName, nil
+	}
+
+	err = s.store.UpdateUser(ctx, UserFlag{Username: username, FlagName: flagName, Enabled: enabled})
 	if err != nil {
 		return "", err
 	}

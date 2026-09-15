@@ -15,11 +15,16 @@ import (
 
 type stubFlags struct {
 	createFn   func(ctx context.Context, user, name string, enabled bool) (string, error)
+	updateFn   func(ctx context.Context, user, name string, enabled bool) (string, error)
 	evaluateFn func(ctx context.Context, user, name string) (string, bool, error)
 }
 
 func (s stubFlags) Create(ctx context.Context, user, name string, enabled bool) (string, error) {
 	return s.createFn(ctx, user, name, enabled)
+}
+
+func (s stubFlags) Update(ctx context.Context, user, name string, enabled bool) (string, error) {
+	return s.updateFn(ctx, user, name, enabled)
 }
 
 func (s stubFlags) Evaluate(ctx context.Context, user, name string) (string, bool, error) {
@@ -49,6 +54,15 @@ func TestCreateAndEvaluateHandlers(t *testing.T) {
 				return "", flag.ErrFlagExists
 			}
 			if user == "" && name == "ok" && enabled {
+				return "ok", nil
+			}
+			return "", errors.New("unexpected")
+		},
+		updateFn: func(_ context.Context, user, name string, enabled bool) (string, error) {
+			if name == "bad!" {
+				return "", flag.ErrInvalidFlagName
+			}
+			if user == "" && name == "ok" && !enabled {
 				return "ok", nil
 			}
 			return "", errors.New("unexpected")
@@ -96,6 +110,26 @@ func TestCreateAndEvaluateHandlers(t *testing.T) {
 		rec := httptest.NewRecorder()
 		h.ServeHTTP(rec, req)
 		if rec.Code != http.StatusConflict {
+			t.Fatalf("status %d", rec.Code)
+		}
+	})
+
+	t.Run("update success", func(t *testing.T) {
+		body := `{"user":"","flagname":"ok","enabled":false}`
+		req := httptest.NewRequest(http.MethodPut, "/v1/flag", bytes.NewBufferString(body))
+		rec := httptest.NewRecorder()
+		h.ServeHTTP(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status %d", rec.Code)
+		}
+	})
+
+	t.Run("update invalid", func(t *testing.T) {
+		body := `{"user":"","flagname":"bad!","enabled":true}`
+		req := httptest.NewRequest(http.MethodPut, "/v1/flag", bytes.NewBufferString(body))
+		rec := httptest.NewRecorder()
+		h.ServeHTTP(rec, req)
+		if rec.Code != http.StatusBadRequest {
 			t.Fatalf("status %d", rec.Code)
 		}
 	})

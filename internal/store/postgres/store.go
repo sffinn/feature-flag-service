@@ -36,6 +36,22 @@ func (s *Store) CreateUser(ctx context.Context, f flag.UserFlag) error {
 	return mapWriteErr(err)
 }
 
+func (s *Store) UpdateGlobal(ctx context.Context, f flag.GlobalFlag) error {
+	_, err := s.pool.Exec(ctx,
+		`UPDATE global_flags SET enabled = $1 WHERE flagname = $2`,
+		f.Enabled, f.FlagName,
+	)
+	return mapWriteErr(err)
+}
+
+func (s *Store) UpdateUser(ctx context.Context, f flag.UserFlag) error {
+	_, err := s.pool.Exec(ctx,
+		`UPDATE user_flags SET enabled = $1 WHERE username = $2 AND flagname = $3`,
+		f.Enabled, f.Username, f.FlagName,
+	)
+	return mapWriteErr(err)
+}
+
 func (s *Store) GetGlobal(ctx context.Context, flagName string) (bool, error) {
 	var enabled bool
 	err := s.pool.QueryRow(ctx,

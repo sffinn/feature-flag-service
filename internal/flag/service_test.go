@@ -57,14 +57,14 @@ func TestValidateFlagName(t *testing.T) {
 }
 
 type memStore struct {
-	mu      sync.Mutex
-	global  map[string]bool
+	mu       sync.Mutex
+	global   map[string]bool
 	userFlag map[string]bool
 }
 
 func newMemStore() *memStore {
 	return &memStore{
-		global:  map[string]bool{},
+		global:   map[string]bool{},
 		userFlag: map[string]bool{},
 	}
 }
@@ -89,6 +89,20 @@ func (m *memStore) CreateUser(_ context.Context, f flag.UserFlag) error {
 		return flag.ErrFlagExists
 	}
 	m.userFlag[k] = f.Enabled
+	return nil
+}
+
+func (m *memStore) UpdateGlobal(_ context.Context, f flag.GlobalFlag) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.global[f.FlagName] = f.Enabled
+	return nil
+}
+
+func (m *memStore) UpdateUser(_ context.Context, f flag.UserFlag) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.userFlag[userMapKey(f.Username, f.FlagName)] = f.Enabled
 	return nil
 }
 
